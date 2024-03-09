@@ -1,8 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Button Example</title>
+</head>
 <body>
-<meta http-equiv="refresh" content="0; url=webpreview/index.html">
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+href="index.html"
+<button href="preview/index.html"">Ver Preview href</button>
+<button onclick="goToPreview()">Ver Preview</button>
+
+<script>
+function goToPreview() {
+  window.location.href = 'preview/index.html';
+}
+</script>
+
 </body>
 </html>
+
+
