@@ -1,0 +1,26 @@
+/// <summary>
+/// Inserta un nuevo usuario con credenciales
+/// </summary>
+public UserBE InsertUser(UserBE pUser)
+{
+    // Crear entidad de usuario
+    var userEntity = new UserEntity
+    {
+        UserFirstName = pUser.UserFirstName,
+        UserLastName = pUser.UserLastName,
+        UserDni = pUser.UserDni,
+        UserEmail = pUser.UserEmail.Value,
+        UserRoleId = pUser.UserRoleId,
+        UserStatus = true,
+        CreatedDate = DateTime.Now,
+        ModificateDate = DateTime.Now
+    };
+
+    _context.Users.Add(userEntity);
+    _context.SaveChanges();
+
+    // Actualizar el ID en el objeto de dominio
+    pUser.UserId = userEntity.UserId;
+
+    return pUser;
+}
