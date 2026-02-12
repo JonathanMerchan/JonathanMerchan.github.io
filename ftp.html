@@ -3,23 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archivos</title>
+    <title>Explorador</title>
+    
+    <!-- Fuentes de Google -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Estilos CSS -->
+    <link rel="stylesheet" href="assets/css/ftp-styles.css">
 </head>
 <body>
+    <!-- Animación de fondo -->
     <div class="bg-animation"></div>
 
+    <!-- Encabezado -->
     <header>
         <div class="header-content">
-            <h1>📁 Explorador</h1>
+            <h1>📁 Archivos</h1>
             <a href="index.html" class="back-btn">
                 ← Volver al Inicio
             </a>
         </div>
     </header>
 
+    <!-- Contenido principal -->
     <div class="container">
+        <!-- Breadcrumb -->
         <div class="breadcrumb">
             <span>📂</span>
             <span>repositorio</span>
@@ -27,21 +35,23 @@
             <span class="current">public</span>
         </div>
 
+        <!-- Estadísticas -->
         <div class="stats">
             <div class="stat-card">
-                <div class="stat-number" id="total-files">0</div>
+                <div class="stat-number" id="total-files">-</div>
                 <div class="stat-label">Archivos Totales</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="total-size">0 KB</div>
+                <div class="stat-number" id="total-size">-</div>
                 <div class="stat-label">Tamaño Total</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="last-update">Hoy</div>
+                <div class="stat-number" id="last-update">-</div>
                 <div class="stat-label">Última Actualización</div>
             </div>
         </div>
 
+        <!-- Lista de archivos -->
         <div class="file-list">
             <div class="file-header">
                 <span>Nombre</span>
@@ -50,158 +60,16 @@
                 <span>Acción</span>
             </div>
             <div id="files-container">
-                <!-- Files will be loaded here by JavaScript -->
+                <!-- Estado de carga inicial -->
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Cargando archivos...</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Configuración: actualiza esta ruta a la carpeta donde tendrás tus archivos
-        const FILES_DIRECTORY = 'public';
-        
-        // Lista de archivos - ACTUALIZA ESTA LISTA con tus archivos reales
-        const files = [
-            {
-                name: 'documento.pdf',
-                type: 'pdf',
-                size: 1250000, // bytes
-                date: '2025-02-10',
-                icon: '📄'
-            },
-            {
-                name: 'presentacion.pptx',
-                type: 'pptx',
-                size: 3500000,
-                date: '2025-02-08',
-                icon: '📊'
-            },
-            {
-                name: 'imagen.jpg',
-                type: 'image',
-                size: 850000,
-                date: '2025-02-05',
-                icon: '🖼️'
-            },
-            {
-                name: 'codigo.zip',
-                type: 'zip',
-                size: 5200000,
-                date: '2025-02-01',
-                icon: '📦'
-            },
-            {
-                name: 'datos.xlsx',
-                type: 'excel',
-                size: 450000,
-                date: '2025-01-28',
-                icon: '📈'
-            }
-        ];
-
-        // Función para formatear bytes a tamaño legible
-        function formatBytes(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-        }
-
-        // Función para formatear fecha
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diffTime = Math.abs(now - date);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 0) return 'Hoy';
-            if (diffDays === 1) return 'Ayer';
-            if (diffDays < 7) return `Hace ${diffDays} días`;
-            
-            return date.toLocaleDateString('es-ES', { 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-            });
-        }
-
-        // Función para obtener el ícono según el tipo de archivo
-        function getFileIcon(type) {
-            const icons = {
-                'pdf': '📄',
-                'doc': '📝',
-                'docx': '📝',
-                'xls': '📊',
-                'xlsx': '📈',
-                'ppt': '📊',
-                'pptx': '📊',
-                'zip': '📦',
-                'rar': '📦',
-                'image': '🖼️',
-                'jpg': '🖼️',
-                'png': '🖼️',
-                'gif': '🖼️',
-                'mp4': '🎬',
-                'mp3': '🎵',
-                'txt': '📃',
-                'default': '📄'
-            };
-            return icons[type] || icons['default'];
-        }
-
-        // Cargar archivos
-        function loadFiles() {
-            const container = document.getElementById('files-container');
-            
-            if (files.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📭</div>
-                        <p>No hay archivos disponibles en este momento</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = files.map(file => `
-                <div class="file-item">
-                    <div class="file-name">
-                        <div class="file-icon">${file.icon}</div>
-                        <div class="file-info">
-                            <strong>${file.name}</strong>
-                            <small>${file.type.toUpperCase()}</small>
-                        </div>
-                    </div>
-                    <div class="file-size">${formatBytes(file.size)}</div>
-                    <div class="file-date">${formatDate(file.date)}</div>
-                    <a href="${FILES_DIRECTORY}/${file.name}" 
-                       download 
-                       class="download-btn">
-                        ⬇ Descargar
-                    </a>
-                </div>
-            `).join('');
-
-            // Actualizar estadísticas
-            updateStats();
-        }
-
-        // Actualizar estadísticas
-        function updateStats() {
-            const totalFiles = files.length;
-            const totalSize = files.reduce((sum, file) => sum + file.size, 0);
-            const latestDate = files.reduce((latest, file) => {
-                const fileDate = new Date(file.date);
-                return fileDate > latest ? fileDate : latest;
-            }, new Date(0));
-
-            document.getElementById('total-files').textContent = totalFiles;
-            document.getElementById('total-size').textContent = formatBytes(totalSize);
-            document.getElementById('last-update').textContent = formatDate(latestDate.toISOString().split('T')[0]);
-        }
-
-        // Cargar archivos al iniciar
-        document.addEventListener('DOMContentLoaded', loadFiles);
-    </script>
+    <!-- Script JavaScript -->
+    <script src="assets/js/ftp-script.js"></script>
 </body>
 </html>
