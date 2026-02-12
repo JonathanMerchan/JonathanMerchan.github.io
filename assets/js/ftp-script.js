@@ -4,8 +4,8 @@
 
 const CONFIG = {
     mode: 'github-api', // 'github-api' o 'manual'
-    githubUser: 'TU-USUARIO',  // ⬅️ CAMBIA ESTO por tu usuario de GitHub
-    githubRepo: 'TU-USUARIO.github.io',  // ⬅️ CAMBIA ESTO por el nombre de tu repositorio
+    githubUser: 'JonathanMerchan',  // ⬅️ CAMBIA ESTO por tu usuario de GitHub
+    githubRepo: 'JonathanMerchan.github.io',  // ⬅️ CAMBIA ESTO por el nombre de tu repositorio
     publicFolder: 'public'
 };
 
@@ -17,21 +17,7 @@ const MANUAL_FILES = [
         size: 1250000,
         date: '2025-02-10',
         icon: '📄'
-    },
-    {
-        name: 'presentacion.pptx',
-        type: 'pptx',
-        size: 3500000,
-        date: '2025-02-08',
-        icon: '📊'
-    },
-    {
-        name: 'imagen.jpg',
-        type: 'image',
-        size: 850000,
-        date: '2025-02-05',
-        icon: '🖼️'
-    }
+    }    
 ];
 
 // ============================================
