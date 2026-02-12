@@ -4,8 +4,8 @@
 
 const CONFIG = {
     mode: 'github-api', // 'github-api' o 'manual'
-    githubUser: 'TU-USUARIO',  // ⬅️ CAMBIA ESTO por tu usuario de GitHub
-    githubRepo: 'TU-USUARIO.github.io',  // ⬅️ CAMBIA ESTO por el nombre de tu repositorio
+    githubUser: 'JonathanMerchan',  // ⬅️ CAMBIA ESTO por tu usuario de GitHub
+    githubRepo: 'JonathanMerchan.github.io',  // ⬅️ CAMBIA ESTO por el nombre de tu repositorio
     publicFolder: 'public'
 };
 
