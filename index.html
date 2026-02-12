@@ -1,20 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Button Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portafolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
-<button href="WebPrview/index.html"">Ver Preview href</button>
-<button onclick="goToPreview()">Ver Preview</button>
+    <div class="bg-animation"></div>
 
-<script>
-function goToPreview() {
-  window.location.href = 'WebPrview/index.html';
-}
-</script>
+    <nav>
+        <div class="logo">PORTAFOLIO</div>
+        <ul class="nav-links">
+            <li><a href="#home">Inicio</a></li>
+            <li><a href="#about">Sobre mí</a></li>
+            <li><a href="#projects">Proyectos</a></li>
+            <li><a href="ftp.html" class="ftp-btn">📁 Archivos</a></li>
+        </ul>
+    </nav>
 
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Hola, soy Jonathan</h1>
+            <p>Desarrollador creativo especializado en crear experiencias únicas. Transformo ideas en realidad a través del código.</p>
+            <div class="cta-group">
+                <a href="#projects" class="btn btn-primary">Ver Proyectos</a>
+                <a href="#about" class="btn btn-secondary">Conocer más</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <h2 class="section-title">Sobre mí</h2>
+        <div class="about-grid">
+            <div class="skill-card">
+                <h3>💻 Desarrollo</h3>
+                <p>Experto en desarrollo moderno con .Net, JavaScript, Angular y más. Creando soluciones escalables y eficientes.</p>
+            </div>
+            <div class="skill-card">
+                <h3>🎨 Diseño</h3>
+                <p>Apasionado por la funcionalidad. Creando soluciones integrales, completas, intuitivas, funcionales, siguendo las mejores practicas.</p>
+            </div>
+            <div class="skill-card">
+                <h3>🚀 Innovación</h3>
+                <p>Siempre aprendiendo nuevas tecnologías y metodologías para crear soluciones innovadoras.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects" id="projects">
+        <h2 class="section-title">Proyectos Destacados</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <div class="project-img">🎯</div>
+                <div class="project-content">
+                    <h3>Proyecto Alpha</h3>
+                    <p>Una aplicación innovadora que revoluciona la forma en que trabajamos con datos.</p>
+                    <div class="project-tags">
+                        <span class="tag">Angular 17+</span>
+                        <span class="tag">.net Core</span>
+                        <span class="tag">SQL Server</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-img">🌐</div>
+                <div class="project-content">
+                    <h3>Proyecto Beta</h3>
+                    <p>Plataforma de comercio electrónico con diseño moderno y experiencia de usuario excepcional.</p>
+                    <div class="project-tags">
+                        <span class="tag">Angular 17+</span>
+                        <span class="tag">.Net core / minimal api</span>
+                        <span class="tag">Stripe</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-img">📱</div>
+                <div class="project-content">
+                    <h3>Proyecto Gamma</h3>
+                    <p>Aplicación móvil multiplataforma con funcionalidades avanzadas y diseño intuitivo.</p>
+                    <div class="project-tags">
+                        <span class="tag">Angular Frienly</span>
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">API REST</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="social-links">
+            <a href="#">GitHub</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Twitter</a>
+            <a href="#">Email</a>
+        </div>
+        <p>&copy; 2026</p>
+    </footer>
 </body>
 </html>
 
