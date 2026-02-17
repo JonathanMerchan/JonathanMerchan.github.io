@@ -1,0 +1,143 @@
+
+ng new XXXXX  --> crear proyecto
+ng g component componetns/XXXXX	--> crea un componente
+ng g service services/XXXX --> crea un servicio
+ng g --class models/XXXX --> crea un modelo (para objetos)
+ng g directive directives/XXX  --> crea una directiva personalizada  en el proyecto
+
+ng serve --> inicial el proytecto
+ng serve -o --> inicia el proyecto y lo lanza
+
+ngOnInit():void{XXX}  -->es una funcon que se ejecuta al inicializar el componente. seimporta de croe
+onChanges(){XXX} -->
+
+constructor(
+private variableName ClassName){}  --> injecta una clase al componente
+
+#########################################################################
+Relaciona doatos en tre el modelos y la vista importar FormModule
+tx
+VAriableName:string = "";
+
+html
+<input [(ngModel)]="VariableName" placeholder="XXX">
+<p>La variable es: {{VariableName}}</p>
+
+#########################################################################
+import ComonMdoules??
+Lista elementos cambiando el color segun status
+en ts 
+names=[
+{name:"XXX", status:"online"}.
+{}
+]
+
+getColor(){
+return status === "online" ? "green" : "red";
+}
+
+
+en el html
+
+<ul>
+<li *ngfor="let nameobj of names"
+[ngStyles]= "{'color': getcolor{nameobj.stutus}}">
+{{nameobj.name}}
+</li>
+</ul>
+
+
+#########################################################################
+Ejemplo directiva personlaizada () cambia el color del elemento con el mouse
+nombredirectiva =  appHighlight
+ts
+constructor (
+private el:ElementRef,
+private rendere:Renderer2
+){}
+
+@HostLsitener('mouseenter')onMouseEnter(){
+this.rendere.setStyle(this.el.nativeElement, 'backgroundColor', 'yelow')
+}
+
+@HostListener('mouseleave')onMouseLeave(){
+this.renderer.setStyle(this.el.nativeElement, 'backgroundColor', 'white')
+}
+
+html
+<p appHighlight >texto</p>  --> cambia el color del texto
+<ul>
+<li *ngfor="let nameobj of names" appHighlight >{{nameobj.name}}</li>
+</ul>  --> habilita la directiva en cada elementos de la lista
+
+#########################################################################
+export enum TipoIdentificacion {
+  Nit = 1,
+  Cedula = 2,
+  CedulaExtranjeria = 3
+}
+#########################################################################
+Navegar a potr pagina eviando un dato
+
+envioEditarCliente(cliente: ClienteBE): void {
+      console.log('clienteEdit table:', cliente); 
+      this.editClient = cliente;
+      this.router.navigate(['/edit'],  { state: { cliente }});
+  }
+
+en el ts receptor capturar con history.state.cliente
+ngOnInit(){
+    this.clienteEdit = history.state.cliente;
+    console.log("entrada edit" + this.clienteEdit);    
+    this.cargaInicial()
+    this.cargarPaises();
+    this.cargarDepartamentos(this.paisSeleccionadoId);
+    this.cargarCiudades(this.departamentoSeleccionadoId)
+  }
+
+#########################################################################
+Exportar datos de una variable a excel
+
+instalar 
+npm install xlsx file-saver --save
+
+importar
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
+exportarExcel() {
+    if (!this.ClientesList() || this.ClientesList().length === 0) {
+      alert('No hay datos para exportar');
+      return;
+    }
+
+    // Convertir los objetos a formato plano
+    const exportData = this.ClientesList().map(c => ({
+      ID: c.clnId,
+      TipoIdentificacion: this.tipoIdentificacion[c.clnTpoIdnId],
+      Identificacion: c.clnNumeroIdentidicacion,
+      RazonSocial: c.clnRazonSocial,
+      Pais: c.clnPaisNombre,
+      Departamento: c.clnDepartamentoNombre,
+      Ciudad: c.clnCiudadNombre
+    }));
+
+    // Crear hoja de Excel
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // Crear libro de Excel
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Clientes');
+
+    // Guardar archivo
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    const time = new Date().getTime();
+    saveAs(data, `Clientes${time}.xlsx`);
+  }
+
+#########################################################################
+
+#########################################################################
+
+#########################################################################

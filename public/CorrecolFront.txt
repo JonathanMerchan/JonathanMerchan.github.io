@@ -1,0 +1,1309 @@
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\index.html 
+====================================================================================== 
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>FrontBoots</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\main.ts 
+====================================================================================== 
+import { bootstrapApplication } from '@angular/platform-browser';
+import { appConfig } from './app/app.config';
+import { App } from './app/app';
+
+bootstrapApplication(App, appConfig)
+  .catch((err) => console.error(err));
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\styles.css 
+====================================================================================== 
+/* You can add global styles to this file, and also import other style files */
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\app.config.ts 
+====================================================================================== 
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideRouter } from '@angular/router';
+
+import { routes } from './app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideRouter(routes)
+  ]
+};
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\app.css 
+====================================================================================== 
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\app.html 
+====================================================================================== 
+<router-outlet></router-outlet>
+<!-- <div class="container mt-4">
+  <h1 class="text-primary">Angular 21 + Bootstrap</h1>
+
+  <button class="btn btn-success">
+    Botón Bootstrap
+  </button>
+
+  <div class="alert alert-info mt-3">
+    Esto es una alerta de Bootstrap.
+  </div>
+</div> -->
+<!-- <div>
+  <app-templates></app-templates>  
+</div> --> 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\app.routes.ts 
+====================================================================================== 
+import { Routes } from '@angular/router';
+import { Home } from './pages/home/home';
+import { AddClient } from './components/add-client/add-client';
+import { EditClient } from './components/edit-client/edit-client';
+
+
+export const routes: Routes = [
+    {path: "add", component: AddClient},
+    {path: "edit", component: EditClient},
+    {path: "**", component: Home}
+
+];
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\app.spec.ts 
+====================================================================================== 
+import { TestBed } from '@angular/core/testing';
+import { App } from './app';
+
+describe('App', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [App],
+    }).compileComponents();
+  });
+
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
+  });
+
+  it('should render title', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, FrontBoots');
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\app.ts 
+====================================================================================== 
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  templateUrl: './app.html',
+  styleUrl: './app.css'
+})
+export class App {
+  protected readonly title = signal('FrontBoots');
+}
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\add-client\add-client.css 
+====================================================================================== 
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\add-client\add-client.html 
+====================================================================================== 
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h2 class="text-center mb-5">Agregar</h2>
+       <form (ngSubmit)="agregarCliente()" #formCliente="ngForm">
+          <div class="row g-3">
+
+            <!-- Tipo de Identificación -->
+            <div class="col-12">
+              <a>Seleccione Tipo de Identificación</a>
+              <select class="form-select" [(ngModel)]="tipoIdentificacion" name="tipoIdentificacion" required>
+                <option [ngValue]="null" disabled>Seleccione Tipo de Identificación</option>
+                <option value=1>Nit</option>
+                <option value=2>Cédula</option>
+                <option value=3>Cédula de Extranjería</option>
+              </select>
+            </div>
+
+            <!-- Identificación -->
+            <div class="col-md-6">
+              <a>Numero de identificacion</a>
+              <input type="text" 
+                    class="form-control" 
+                    placeholder="identificación" 
+                    name="identificacion"
+                    [(ngModel)]="identificacion"
+                    required>
+            </div>
+
+            <!-- Razón Social -->
+            <div class="col-md-6">
+              <a>Nombre de la razon social</a>
+              <input type="text" 
+                    class="form-control" 
+                    placeholder="Razón Social"
+                    name="razonSocial"
+                    [(ngModel)]="razonSocial"
+                    required>
+            </div>
+
+            <!-- País -->
+            <div class="col-12">
+              <a>Eliga un pais</a>
+              <select class="form-select"
+                      [(ngModel)]="paisSeleccionado"
+                      (ngModelChange)="onPaisChange($event)"
+                      name="paisSeleccionado"
+                      required>
+
+                <option [ngValue]="null" disabled>Seleccione País</option>
+
+                <option *ngFor="let pais of paisList()" [ngValue]="pais">
+                  {{ pais.paisNombre }}
+                </option>
+
+              </select>
+            </div>
+
+            <!-- Departamento -->
+            <div class="col-12" *ngIf="departamentoList().length > 0">
+              <a>Elija un departamento</a>
+              <select class="form-select"
+                      [(ngModel)]="departamentoSeleccionado"
+                      (ngModelChange)="onDepartamentoChange($event)"
+                      name="departamentoSeleccionado"
+                      required>
+
+                <option [ngValue]="null" disabled>Seleccione Departamento</option>
+
+                <option *ngFor="let departamento of departamentoList()" [ngValue]="departamento">
+                  {{ departamento.departamentoNombre }}
+                </option>
+
+              </select>
+            </div>
+
+            <!-- Ciudad -->
+            <div class="col-12" *ngIf="ciudadList().length > 0">
+              <a>Elija una ciudad</a>
+              <select class="form-select"
+                      [(ngModel)]="ciudadSeleccionada"
+                      (ngModelChange)="onCiudadChange($event)"
+                      name="ciudadSeleccionada"
+                      required>
+
+                <option [ngValue]="null" disabled>Seleccione Ciudad</option>
+
+                <option *ngFor="let ciudad of ciudadList()" [ngValue]="ciudad">
+                  {{ ciudad.ciudadNombre }}
+                </option>
+
+              </select>
+            </div>
+
+            <!-- Botón Agregar -->
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-primary btn-lg px-5">Agregar</button>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div> 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\add-client\add-client.spec.ts 
+====================================================================================== 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { AddClient } from './add-client';
+
+describe('AddClient', () => {
+  let component: AddClient;
+  let fixture: ComponentFixture<AddClient>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AddClient]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(AddClient);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\add-client\add-client.ts 
+====================================================================================== 
+import { Component, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { PaisService } from '../../services/pais-service';
+import { DepartamentoService } from '../../services/departamento-service';
+import { CiudadService } from '../../services/ciudad-service';
+import { CiudadBE, DepartamentoBE, PaisBE } from '../../modules/pais';
+import { ClientService } from '../../services/client-service';
+import { Router } from '@angular/router';
+import { ClienteBE } from '../../modules/cliente';
+
+@Component({
+  selector: 'app-add-client',
+  standalone: true,
+  imports: [FormsModule, CommonModule],
+  templateUrl: './add-client.html',
+  styleUrls: ['./add-client.css']
+})
+export class AddClient implements OnInit {
+  tipoIdentificacion: number = 0;
+  identificacion: string = '';
+  razonSocial: string = '';
+  paisList = signal<PaisBE[]>([]);
+  departamentoList = signal<DepartamentoBE[]>([]);
+  ciudadList = signal<CiudadBE[]> ([]);
+
+  paisSeleccionado: PaisBE | null = null;
+  departamentoSeleccionado: DepartamentoBE | null = null;
+  ciudadSeleccionada: CiudadBE | null = null;
+
+  nuevoCliente:ClienteBE | null = null;
+
+  constructor(
+    private paisService: PaisService,
+    private departamentoService: DepartamentoService,
+    private ciudadService: CiudadService,
+    private clientService: ClientService,
+    private router :Router
+  ) {}
+
+  ngOnInit(): void {
+    this.cargarPaises();
+  }
+
+  cargarPaises() {
+    this.paisService.getPaises().subscribe({
+      next: (data) => {
+        debugger;
+        this.paisList.set(data);
+      },
+      error: (err) => {
+        console.error('Error cargando países', err);
+      }
+    });
+  }
+
+  onPaisChange(pais: PaisBE) {
+    this.paisSeleccionado = pais;
+
+    this.departamentoList.set([]);
+    this.ciudadList.set([]);
+    this.departamentoSeleccionado = null;
+    this.ciudadSeleccionada = null;
+debugger
+    if (pais?.paisId) {
+      this.cargarDepartamentos(pais.paisId);
+    }
+  }
+ 
+  cargarDepartamentos(paisId: number) {
+    this.departamentoService.getDepartamentos(paisId).subscribe({
+      next: (data) => {
+        debugger
+        this.departamentoList.set(data);
+      },
+      error: (err) => {
+        console.error('Error cargando departamentos', err);
+      }
+    });
+  }
+  
+  onDepartamentoChange(departamento: DepartamentoBE) {
+    this.departamentoSeleccionado = departamento;
+
+    this.ciudadList.set([]);
+    this.ciudadSeleccionada = null;
+
+    if (departamento?.departamentoId) {
+      this.cargarCiudades(departamento.departamentoId);
+    }
+  }
+ 
+  cargarCiudades(departamentoId: number) {
+    this.ciudadService.getCiudades(departamentoId).subscribe({
+      next: (data) => {
+        this.ciudadList.set(data);
+      },
+      error: (err) => {
+        console.error('Error cargando ciudades', err);
+      }
+    });
+  }
+  
+  onCiudadChange(ciudad: CiudadBE) {
+    this.ciudadSeleccionada = ciudad;
+
+    console.log('Selección final:', {
+      pais: this.paisSeleccionado,
+      departamento: this.departamentoSeleccionado,
+      ciudad: this.ciudadSeleccionada
+    });
+  }
+
+ agregarCliente() {
+    if (!this.paisSeleccionado ||
+        !this.departamentoSeleccionado ||
+        !this.ciudadSeleccionada) {
+
+      alert('Debe completar todos los campos');
+      return;
+    }
+    
+    this.nuevoCliente = new ClienteBE(
+      0, // clnId, 0 por defecto
+      this.tipoIdentificacion || 0, // clnTpoIdnId
+      this.identificacion || '',
+      this.razonSocial || '',
+      this.paisSeleccionado?.paisId || 0,
+      this.paisSeleccionado?.paisNombre || "",
+      this.departamentoSeleccionado?.departamentoId || 0,
+      this.departamentoSeleccionado?.departamentoNombre || "",
+      this.ciudadSeleccionada?.ciudadId || 0,
+      this.ciudadSeleccionada?.ciudadNombre || ""
+    );
+   debugger;
+    console.log('Enviando cliente:', this.nuevoCliente);
+
+    this.clientService.addCliente(this.nuevoCliente).subscribe({
+      next: () => {
+        alert('Cliente agregado correctamente');
+
+        // Redirigir al Home
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Error al agregar cliente', err);
+      }
+    });
+  }
+}
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\edit-client\edit-client.css 
+====================================================================================== 
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\edit-client\edit-client.html 
+====================================================================================== 
+<!-- <pre>{{ clienteEdit | json }}</pre> -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <h2 class="text-center mb-5">Editar Cliente</h2>
+
+      <form (ngSubmit)="editarCliente()" #formCliente="ngForm">
+        <div class="row g-3">
+
+          <!-- Tipo de Identificación -->
+          <div class="col-12">
+            <a>Seleccione Tipo de Identificación</a>
+            <select class="form-select"
+                    [(ngModel)]="tipoIdentificacion"
+                    name="tipoIdentificacion"
+                    required>
+              <option [ngValue]="null" disabled>Seleccione Tipo de Identificación</option>
+              <option [ngValue]="1">Nit</option>
+              <option [ngValue]="2">Cédula</option>
+              <option [ngValue]="3">Cédula de Extranjería</option>
+            </select>
+          </div>
+
+          <!-- Identificación -->
+          <div class="col-md-6">
+            <a>Numero de identificacion</a>
+            <input type="text"
+                   class="form-control"
+                   placeholder="Identificación"
+                   name="identificacion"
+                   [(ngModel)]="identificacion"
+                   required>
+          </div>
+
+          <!-- Razón Social -->
+          <div class="col-md-6">
+            <a>Nombre de la razon social</a>
+            <input type="text"
+                   class="form-control"
+                   placeholder="Razón Social"
+                   name="razonSocial"
+                   [(ngModel)]="razonSocial"
+                   required>
+          </div>
+
+          <!-- País -->
+          <div class="col-12">
+            <a>Eliga un pais</a>
+            <select class="form-select"
+                    [(ngModel)]="paisSeleccionadoId"
+                    (ngModelChange)="onPaisChange($event)"
+                    name="paisSeleccionadoId"
+                    required>
+
+              <option [ngValue]="null" disabled>Seleccione País</option>
+
+              <option *ngFor="let pais of paisList()" [ngValue]="pais.paisId">
+                {{ pais.paisNombre }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Departamento -->
+          <div class="col-12" *ngIf="departamentoList().length > 0">
+            <a>Elija un departamento</a>
+            <select class="form-select"
+                    [(ngModel)]="departamentoSeleccionadoId"
+                    (ngModelChange)="onDepartamentoChange($event)"
+                    name="departamentoSeleccionadoId"
+                    required>
+
+              <option [ngValue]="null" disabled>Seleccione Departamento</option>
+
+              <option *ngFor="let departamento of departamentoList()" 
+                      [ngValue]="departamento.departamentoId">
+                {{ departamento.departamentoNombre }}
+              </option>
+
+            </select>
+          </div>
+
+          <!-- Ciudad -->
+          <div class="col-12" *ngIf="ciudadList().length > 0">
+            <a>Elija una ciudad</a>
+            <select class="form-select"
+                    [(ngModel)]="ciudadSeleccionadaId"
+                    (ngModelChange)="onCiudadChange($event)"
+                    name="ciudadSeleccionadaId"
+                    required>
+
+              <option [ngValue]="null" disabled>Seleccione Ciudad</option>
+
+              <option *ngFor="let ciudad of ciudadList()" 
+                      [ngValue]="ciudad.ciudadId">
+                {{ ciudad.ciudadNombre }}
+              </option>
+
+            </select>
+          </div>
+
+          <!-- Botón Editar -->
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary btn-lg px-5">
+              Guardar Cambios
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\edit-client\edit-client.spec.ts 
+====================================================================================== 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { EditClient } from './edit-client';
+
+describe('EditClient', () => {
+  let component: EditClient;
+  let fixture: ComponentFixture<EditClient>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [EditClient]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(EditClient);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\edit-client\edit-client.ts 
+====================================================================================== 
+import { Component, signal, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { CiudadBE, DepartamentoBE, PaisBE } from '../../modules/pais';
+import { ClienteBE } from '../../modules/cliente';
+import { PaisService } from '../../services/pais-service';
+import { DepartamentoService } from '../../services/departamento-service';
+import { CiudadService } from '../../services/ciudad-service';
+import { ClientService } from '../../services/client-service';
+import { Router } from '@angular/router';
+import { TipoIdentificacion } from '../../enum/tipo-identificacion-enum';
+
+
+@Component({
+  selector: 'app-edit-client',
+  standalone: true,
+  imports: [FormsModule,CommonModule],
+  templateUrl: './edit-client.html',
+  styleUrl: './edit-client.css',
+})
+export class EditClient {
+  clienteEdit:ClienteBE |null = null;
+  
+  constructor(
+    private paisService: PaisService,
+    private departamentoService: DepartamentoService,
+    private ciudadService: CiudadService,
+    private clientService: ClientService,
+    private router :Router
+  ) {}
+
+  edtCliente:ClienteBE | null = null;
+
+  tipoIdentificacion: number = 0;
+  identificacion: string = '';
+  razonSocial: string = '';
+  paisList = signal<PaisBE[]>([]);
+  departamentoList = signal<DepartamentoBE[]>([]);
+  ciudadList = signal<CiudadBE[]> ([]);
+
+  paisSeleccionadoId: number = 0;
+  departamentoSeleccionadoId: number = 0;
+  ciudadSeleccionadaId: number = 0;
+
+  paisSeleccionado: PaisBE | null = null;
+  departamentoSeleccionado: DepartamentoBE | null = null;
+  ciudadSeleccionada: CiudadBE | null = null;
+
+  ngOnInit(){
+    this.clienteEdit = history.state.cliente;
+    console.log("entrada edit" + this.clienteEdit);    
+    this.cargaInicial()
+    this.cargarPaises();
+    this.cargarDepartamentos(this.paisSeleccionadoId);
+    this.cargarCiudades(this.departamentoSeleccionadoId)
+  }
+
+  cargaInicial(){
+  if (this.clienteEdit != null){
+        this.tipoIdentificacion = this.clienteEdit.clnTpoIdnId;
+        this.identificacion = this.clienteEdit.clnNumeroIdentidicacion;
+        this.razonSocial =  this.clienteEdit.clnRazonSocial;
+        this.paisSeleccionado = {paisId:this.clienteEdit.clnPaisCodigo, paisNombre:this.clienteEdit.clnPaisNombre} as PaisBE;
+        this.paisSeleccionadoId = this.clienteEdit.clnPaisCodigo;
+        this.departamentoSeleccionado = {departamentoId:this.clienteEdit.clnDptColCodigoDane, departamentoNombre:this.clienteEdit.clnDepartamentoNombre} as DepartamentoBE;
+        this.departamentoSeleccionadoId = this.clienteEdit.clnDptColCodigoDane;
+        this.ciudadSeleccionada = {ciudadId:this.clienteEdit.clnDvsPltColCodigoDane, ciudadNombre:this.clienteEdit.clnCiudadNombre} as CiudadBE;
+        this.ciudadSeleccionadaId = this.clienteEdit.clnDvsPltColCodigoDane
+      }
+  }
+
+  cargarPaises() {
+    this.paisService.getPaises().subscribe({
+      next: (data) => {
+        this.paisList.set(data);
+      },
+      error: (err) => {
+        console.error('Error cargando países', err);
+      }
+    });
+  }
+
+  onPaisChange(paisId: number) {
+    this.paisSeleccionado = this.paisList().find(x=> x.paisId == paisId) || null;
+    this.departamentoList.set([]);
+    this.ciudadList.set([]);
+    this.departamentoSeleccionado = null;
+    this.ciudadSeleccionada = null;
+    if (paisId>0) {
+      this.cargarDepartamentos(paisId);
+    }
+  }
+ 
+  cargarDepartamentos(paisId: number) {
+    this.departamentoService.getDepartamentos(paisId).subscribe({
+      next: (data) => {
+        this.departamentoList.set(data);
+      },
+      error: (err) => {
+        console.error('Error cargando departamentos', err);
+      }
+    });
+  }
+  
+  onDepartamentoChange(departamentoId: number) {
+    this.departamentoSeleccionado = this.departamentoList().find(x=> x.departamentoId === departamentoId) || null;
+    this.ciudadList.set([]);
+    this.ciudadSeleccionada = null;
+
+    if (departamentoId > 0) {
+      this.cargarCiudades(departamentoId);
+    }
+  }
+ 
+  cargarCiudades(departamentoId: number) {
+    this.ciudadService.getCiudades(departamentoId).subscribe({
+      next: (data) => {
+        this.ciudadList.set(data);
+      },
+      error: (err) => {
+        console.error('Error cargando ciudades', err);
+      }
+    });
+  }
+  
+  onCiudadChange(ciudadId: number) {
+    this.ciudadSeleccionada = this.ciudadList().find(x=> x.ciudadId === ciudadId)||null;
+    console.log('Selección final:', {
+      pais: this.paisSeleccionado,
+      departamento: this.departamentoSeleccionado,
+      ciudad: this.ciudadSeleccionada
+    });
+  }
+
+ editarCliente() {
+  debugger;
+    if (!this.paisSeleccionado ||
+        !this.departamentoSeleccionado ||
+        !this.ciudadSeleccionada) {
+
+      alert('Debe completar todos los campos');
+      return;
+    }
+
+    
+    this.edtCliente = new ClienteBE(
+      this.clienteEdit?.clnId || 0,
+      this.tipoIdentificacion || 0, 
+      this.identificacion || '',
+      this.razonSocial || '',
+      this.paisSeleccionado?.paisId || 0,
+      this.paisSeleccionado?.paisNombre || "",
+      this.departamentoSeleccionado?.departamentoId || 0,
+      this.departamentoSeleccionado?.departamentoNombre || "",
+      this.ciudadSeleccionada?.ciudadId || 0,
+      this.ciudadSeleccionada?.ciudadNombre || ""
+    );
+    
+    debugger;
+    console.log('Editando cliente:', this.edtCliente);
+
+    this.clientService.UpdateCliente(this.edtCliente).subscribe({
+      next: () => {
+        alert('Cliente actualizado correctamente');
+        // Redirigir al Home
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Error al actualizando cliente', err);
+      }
+    });
+  }
+  
+
+}
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\table-client\table-client.css 
+====================================================================================== 
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\table-client\table-client.html 
+====================================================================================== 
+<!-- <pre>{{ ClientesList | json }}</pre> -->
+<section id="tabla" class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5">Clientes Recientes</h2>
+     
+    <!-- Tabla responsive con botones -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped shadow-sm">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Tipo Identificacion</th>
+            <th>Identificacion</th>
+            <th>Razon Social</th>
+            <th>Departamento</th>
+            <th>Minicipio</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+          *ngFor="let cliente of ClientesList; "
+        >
+          <td>{{ cliente.clnId }}</td>
+          <td>{{ tipoIdentificacion[cliente.clnTpoIdnId] }}</td>   
+          <td>{{ cliente.clnNumeroIdentidicacion }}</td> 
+          <td>{{ cliente.clnRazonSocial }}</td>
+          <td>{{ cliente.clnDepartamentoNombre }}</td>         
+          <td>{{ cliente.clnCiudadNombre }}</td> 
+
+          <td class="text-center">
+            <button class="button" (click)="envioEditarCliente(cliente)">
+              Editar
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div> 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\table-client\table-client.spec.ts 
+====================================================================================== 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { TableClient } from './table-client';
+
+describe('TableClient', () => {
+  let component: TableClient;
+  let fixture: ComponentFixture<TableClient>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TableClient]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(TableClient);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\components\table-client\table-client.ts 
+====================================================================================== 
+import { Component, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { ClienteBE } from '../../modules/cliente';
+import { CommonModule, JsonPipe } from '@angular/common';
+import { EditClient } from '../edit-client/edit-client';
+import { Router } from '@angular/router';
+import { TipoIdentificacion } from '../../enum/tipo-identificacion-enum';
+
+@Component({
+  selector: 'app-table-client',
+  standalone: true,
+  imports: [CommonModule, JsonPipe, EditClient],
+  templateUrl: './table-client.html',
+  styleUrls: ['./table-client.css']
+})
+export class TableClient {  
+  @Input() ClientesList: ClienteBE[] =[];
+  tipoIdentificacion = TipoIdentificacion
+  editClient: ClienteBE| null = null;
+
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private router:Router
+  ){}
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('tipoIdentificacion:', this.tipoIdentificacion); 
+    console.log('ClientesList:', this.ClientesList);     
+    this.cdr.markForCheck();  
+  }
+
+  envioEditarCliente(cliente: ClienteBE): void {
+      console.log('clienteEdit table:', cliente); 
+      this.editClient = cliente;
+      this.router.navigate(['/edit'],  { state: { cliente }});
+  }
+}
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\enum\tipo-identificacion-enum.ts 
+====================================================================================== 
+export enum TipoIdentificacion {
+  Nit = 1,
+  Cedula = 2,
+  CedulaExtranjeria = 3
+} 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\modules\cliente.spec.ts 
+====================================================================================== 
+import { Cliente } from './cliente';
+
+describe('Cliente', () => {
+  it('should create an instance', () => {
+    expect(new Cliente()).toBeTruthy();
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\modules\cliente.ts 
+====================================================================================== 
+export class ClienteBE 
+{
+    constructor(
+        public clnId: number=0,
+        public clnTpoIdnId: number,
+        public clnNumeroIdentidicacion: string,
+        public clnRazonSocial: string,
+        public clnPaisCodigo : number,
+        public clnPaisNombre? : string,
+        public clnDptColCodigoDane: number =0,
+        public clnDepartamentoNombre?: string,
+        public clnDvsPltColCodigoDane: number= 0,
+        public clnCiudadNombre?: string
+    ){}
+}
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\modules\pais.spec.ts 
+====================================================================================== 
+import { Pais } from './pais';
+
+describe('Pais', () => {
+  it('should create an instance', () => {
+    expect(new Pais()).toBeTruthy();
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\modules\pais.ts 
+====================================================================================== 
+export class PaisBE {
+  constructor(
+    public paisId: number,
+    public paisNombre: string        
+  ) {}
+}
+
+export class DepartamentoBE {
+  constructor(
+    public departamentoId: number,
+    public departamentoNombre: string,
+    public paisId: number        
+  ) {}
+}
+
+export class CiudadBE {
+  constructor(
+    public ciudadId: number,
+    public ciudadNombre: string,
+    public departamentoId: number        
+  ) {}
+}
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\pages\home\home.css 
+====================================================================================== 
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\pages\home\home.html 
+====================================================================================== 
+<div class = "container col-lg-8">
+
+    <div class="row">
+    </div>
+        <button class="btn btn-success" routerLink="/add">Agregar cliente</button>
+        <button class="btn btn-success" (click)="exportarExcel()">Exportar Clientes</button>
+    <div class="col-lg-12">
+        <app-table-client [ClientesList] = "ClientesList()"></app-table-client>
+    </div>
+</div> 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\pages\home\home.spec.ts 
+====================================================================================== 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { Home } from './home';
+
+describe('Home', () => {
+  let component: Home;
+  let fixture: ComponentFixture<Home>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [Home]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(Home);
+    component = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\pages\home\home.ts 
+====================================================================================== 
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef} from '@angular/core';
+import { signal } from '@angular/core';
+import { CommonModule,  JsonPipe} from '@angular/common';
+import { ClientService } from '../../services/client-service';
+import { ClienteBE } from '../../modules/cliente';
+import { TableClient } from '../../components/table-client/table-client';
+import { RouterModule } from '@angular/router';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { TipoIdentificacion } from '../../enum/tipo-identificacion-enum';
+
+@Component({
+  selector: 'app-home',
+  standalone: true,
+  imports: [JsonPipe, CommonModule, TableClient, RouterModule],
+  templateUrl: './home.html',
+  styleUrl: './home.css',
+})
+export class Home {
+  ClientesList = signal<ClienteBE[]>([]);
+  ClientesExport:ClienteBE[] | null = null;
+  tipoIdentificacion = TipoIdentificacion
+
+  ngOnInit(): void {
+    console.log('panel init');
+    this.LoadClientes();   
+    this.cdr.markForCheck(); 
+  }
+
+constructor(
+    private ClienteService: ClientService,
+    private cdr: ChangeDetectorRef
+  ){}
+
+  LoadClientes(): void {
+    console.log('El componente se abrió - llamando api');
+    this.ClienteService.getClientes().subscribe({
+      next: (data) => {
+        console.log('Mapeando datos de clientes');        
+        this.ClientesList.set(data);
+        // this.ClientesExport = this.ClientesList();
+        console.log('Mapeando datosfinalizado');   
+      },
+      error: (err) => {
+        console.error('Error cargando clientes', err);
+      }
+    });
+  }
+
+  exportarExcel() {
+    if (!this.ClientesList() || this.ClientesList().length === 0) {
+      alert('No hay datos para exportar');
+      return;
+    }
+
+    // Convertir los objetos a formato plano (opcional: filtrar columnas)
+    const exportData = this.ClientesList().map(c => ({
+      ID: c.clnId,
+      TipoIdentificacion: this.tipoIdentificacion[c.clnTpoIdnId],
+      Identificacion: c.clnNumeroIdentidicacion,
+      RazonSocial: c.clnRazonSocial,
+      Pais: c.clnPaisNombre,
+      Departamento: c.clnDepartamentoNombre,
+      Ciudad: c.clnCiudadNombre
+    }));
+
+    // Crear hoja de Excel
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // Crear libro de Excel
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Clientes');
+
+    // Guardar archivo
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    const time = new Date().getTime();
+    saveAs(data, `Clientes${time}.xlsx`);
+  }
+
+
+}
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\services\ciudad-service.spec.ts 
+====================================================================================== 
+import { TestBed } from '@angular/core/testing';
+
+import { CiudadService } from './ciudad-service';
+
+describe('CiudadService', () => {
+  let service: CiudadService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(CiudadService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\services\ciudad-service.ts 
+====================================================================================== 
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { CiudadBE } from '../modules/pais';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CiudadService {
+  
+  private baseUrl = 'https://localhost:7086';
+
+  constructor(private http: HttpClient) {}
+
+   getCiudades(DepartamentoId: number): Observable<CiudadBE[]> {
+      return this.http.get<CiudadBE[]>(
+        `${this.baseUrl}/ciudades/${DepartamentoId}`
+      );
+    }
+
+}
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\services\client-service.spec.ts 
+====================================================================================== 
+import { TestBed } from '@angular/core/testing';
+
+import { ClientService } from './client-service';
+
+describe('ClientService', () => {
+  let service: ClientService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(ClientService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\services\client-service.ts 
+====================================================================================== 
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ClienteBE } from '../modules/cliente';
+
+@Injectable({
+  providedIn: 'root',
+})
+
+export class ClientService  {
+  private baseUrl = 'https://localhost:7086';
+
+  constructor(private http: HttpClient) {}
+
+  getClientes(): Observable<ClienteBE[]> {
+    return this.http.get<ClienteBE[]>(
+      `${this.baseUrl}/clientes`
+    );
+  }
+  
+  addCliente(cliente: ClienteBE): Observable<ClienteBE> {       
+    return this.http.post<ClienteBE>(
+      `${this.baseUrl}/createcliente`,      
+      cliente
+    );
+  }
+  
+   UpdateCliente(cliente: ClienteBE): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${this.baseUrl}/updatecliente`,
+      cliente    
+    );
+   }
+
+//   getClienteById(clienteId: number): Observable<string[]> {   
+//     return this.http.post<ClienteBE>(
+//       `${this.baseUrl}/cliente`,      
+//       clienteId
+//     );
+//   }
+
+}
+
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\services\departamento-service.spec.ts 
+====================================================================================== 
+import { TestBed } from '@angular/core/testing';
+
+import { DepartamentoService } from './departamento-service';
+
+describe('DepartamentoService', () => {
+  let service: DepartamentoService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(DepartamentoService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\services\departamento-service.ts 
+====================================================================================== 
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { DepartamentoBE } from '../modules/pais';
+
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DepartamentoService {
+  
+  private baseUrl = 'https://localhost:7086';
+
+  constructor(private http: HttpClient) {}
+
+   getDepartamentos(paisId: number): Observable<DepartamentoBE[]> {
+      return this.http.get<DepartamentoBE[]>(
+        `${this.baseUrl}/departamentos/${paisId}`
+      );
+    }
+
+}
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\services\pais-service.spec.ts 
+====================================================================================== 
+import { TestBed } from '@angular/core/testing';
+
+import { PaisService } from './pais-service';
+
+describe('PaisService', () => {
+  let service: PaisService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(PaisService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
+ 
+ 
+====================================================================================== 
+Archivo: D:\0. APIs\PruebaTecnicaJCMC-Correcol\Angular_bootstrap\FrontBoots\src\app\services\pais-service.ts 
+====================================================================================== 
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { PaisBE } from '../modules/pais';
+
+@Injectable({
+  providedIn: 'root',  
+})
+
+export class PaisService {
+  
+  private baseUrl = 'https://localhost:7086';
+
+  constructor(private http: HttpClient) {}
+
+   getPaises(): Observable<PaisBE[]> {
+      return this.http.get<PaisBE[]>(
+        `${this.baseUrl}/paises`
+      );
+    }
+}
+ 
+ 
