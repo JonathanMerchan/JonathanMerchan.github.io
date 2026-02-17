@@ -8,13 +8,23 @@ ng g directive directives/XXX  --> crea una directiva personalizada  en el proye
 ng serve --> inicial el proytecto
 ng serve -o --> inicia el proyecto y lo lanza
 
+ts
 ngOnInit():void{XXX}  -->es una funcon que se ejecuta al inicializar el componente. seimporta de croe
 onChanges(){XXX} -->
 
 constructor(
 private variableName ClassName){}  --> injecta una clase al componente
 
+(ngModelChange)="onPaisChange($event)" --> form de llamar un change desde la vista
 #########################################################################
+Señales crear
+  ciudadList = signal<CiudadBE[]> ([]);
+
+cosumir ciudadList() -- se consumen como funcion 
+
+requeire import { signal } from '@angular/core';
+#########################################################################
+
 Relaciona doatos en tre el modelos y la vista importar FormModule
 tx
 VAriableName:string = "";
@@ -46,6 +56,202 @@ en el html
 </li>
 </ul>
 
+#########################################################################
+Crear enum 
+export enum TipoIdentificacion {
+  Nit = 1,
+  Cedula = 2,
+  CedulaExtranjeria = 3
+}
+
+#########################################################################
+Crear objetos 
+export class ClienteBE 
+{
+    constructor(
+        public clnId: number=0,
+        public clnTpoIdnId: number,
+        public clnNumeroIdentidicacion: string,
+        public clnRazonSocial: string,
+        public clnPaisCodigo : number,
+        public clnPaisNombre? : string,
+        public clnDptColCodigoDane: number =0,
+        public clnDepartamentoNombre?: string,
+        public clnDvsPltColCodigoDane: number= 0,
+        public clnCiudadNombre?: string
+    ){}
+}
+#########################################################################
+
+tabla datos boton
+<!-- <pre>{{ ClientesList | json }}</pre> -->
+<section id="tabla" class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-5">Clientes Recientes</h2>
+     
+    <!-- Tabla responsive con botones -->
+    <div class="table-responsive">
+      <table class="table table-hover table-striped shadow-sm">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Tipo Identificacion</th>
+            <th>Identificacion</th>
+            <th>Razon Social</th>
+            <th>Departamento</th>
+            <th>Minicipio</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+          *ngFor="let cliente of ClientesList; "
+        >
+          <td>{{ cliente.clnId }}</td>
+          <td>{{ tipoIdentificacion[cliente.clnTpoIdnId] }}</td>   
+          <td>{{ cliente.clnNumeroIdentidicacion }}</td> 
+          <td>{{ cliente.clnRazonSocial }}</td>
+          <td>{{ cliente.clnDepartamentoNombre }}</td>         
+          <td>{{ cliente.clnCiudadNombre }}</td> 
+
+          <td class="text-center">
+            <button class="button" (click)="envioEditarCliente(cliente)">
+              Editar
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+#########################################################################
+Select datos dinamicos llama evento
+ <div class="col-12">
+              <a>Eliga un pais</a>
+              <select class="form-select"
+                      [(ngModel)]="paisSeleccionado"
+                      (ngModelChange)="onPaisChange($event)"
+                      name="paisSeleccionado"
+                      required>
+
+                <option [ngValue]="null" disabled>Seleccione País</option>
+
+                <option *ngFor="let pais of paisList()" [ngValue]="pais">
+                  {{ pais.paisNombre }}
+                </option>
+
+              </select>
+            </div>
+
+#########################################################################
+select datos fijos y carga a variable
+<!-- Tipo de Identificación -->
+            <div class="col-12">
+              <a>Seleccione Tipo de Identificación</a>
+              <select class="form-select" [(ngModel)]="tipoIdentificacion" name="tipoIdentificacion" required>
+                <option [ngValue]="null" disabled>Seleccione Tipo de Identificación</option>
+                <option value=1>Nit</option>
+                <option value=2>Cédula</option>
+                <option value=3>Cédula de Extranjería</option>
+              </select>
+            </div>
+
+#########################################################################
+input
+
+<!-- Identificación -->
+            <div class="col-md-6">
+              <a>Numero de identificacion</a>
+              <input type="text" 
+                    class="form-control" 
+                    placeholder="identificación" 
+                    name="identificacion"
+                    [(ngModel)]="identificacion"
+                    required>
+            </div>
+
+#########################################################################
+formulario 
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h2 class="text-center mb-5">Agregar</h2>
+       <form (ngSubmit)="agregarCliente()" #formCliente="ngForm">
+          <div class="row g-3">
+
+            <!-- Tipo de Identificación -->
+            <div class="col-12">
+              <a>Seleccione Tipo de Identificación</a>
+              <select class="form-select" [(ngModel)]="tipoIdentificacion" name="tipoIdentificacion" required>
+                <option [ngValue]="null" disabled>Seleccione Tipo de Identificación</option>
+                <option value=1>Nit</option>
+                <option value=2>Cédula</option>
+                <option value=3>Cédula de Extranjería</option>
+              </select>
+            </div>
+
+            <!-- Identificación -->
+            <div class="col-md-6">
+              <a>Numero de identificacion</a>
+              <input type="text" 
+                    class="form-control" 
+                    placeholder="identificación" 
+                    name="identificacion"
+                    [(ngModel)]="identificacion"
+                    required>
+            </div>
+           
+
+            <!-- País -->
+            <div class="col-12">
+              <a>Eliga un pais</a>
+              <select class="form-select"
+                      [(ngModel)]="paisSeleccionado"
+                      (ngModelChange)="onPaisChange($event)"
+                      name="paisSeleccionado"
+                      required>
+
+                <option [ngValue]="null" disabled>Seleccione País</option>
+
+                <option *ngFor="let pais of paisList()" [ngValue]="pais">
+                  {{ pais.paisNombre }}
+                </option>
+
+              </select>
+            </div>
+
+                       
+
+            <!-- Botón Agregar -->
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-primary btn-lg px-5">Agregar</button>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+#########################################################################
+redirec con envio informacion 
+envioEditarCliente(cliente: ClienteBE): void {
+      console.log('clienteEdit table:', cliente); 
+      this.editClient = cliente;
+      this.router.navigate(['/edit'],  { state: { cliente }});
+  }
+
+en el componente se reciben en 
+ngOnInit(){
+    this.clienteEdit = history.state.cliente;
+    console.log("entrada edit" + this.clienteEdit);   
+  }
+#########################################################################
+#########################################################################
+#########################################################################
 
 #########################################################################
 Ejemplo directiva personlaizada () cambia el color del elemento con el mouse
@@ -137,7 +343,134 @@ exportarExcel() {
   }
 
 #########################################################################
+Modelo de servicio de consulta de api sin autenticacion
+
+export class ClientService  {
+  private baseUrl = 'https://localhost:7086';
+
+  constructor(private http: HttpClient) {}
+
+  getClientes(): Observable<ClienteBE[]> {
+    return this.http.get<ClienteBE[]>(
+      `${this.baseUrl}/clientes`
+    );
+  }
+  
+  addCliente(cliente: ClienteBE): Observable<ClienteBE> {       
+    return this.http.post<ClienteBE>(
+      `${this.baseUrl}/createcliente`,      
+      cliente
+    );
+  }
+  
+   UpdateCliente(cliente: ClienteBE): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${this.baseUrl}/updatecliente`,
+      cliente    
+    );
+   }
+
+//   getClienteById(clienteId: number): Observable<string[]> {   
+//     return this.http.post<ClienteBE>(//--> verbo y objeto que espera recibir
+//       `${this.baseUrl}/cliente`,     //---> url del endpoint
+//       clienteId 			//----> datos que se envian al endpoint
+//     );
+//   }
+
+}
 
 #########################################################################
+para utenticaciones JWT
+
+el token se guarda en  localStorage.setItem('token', response.token); desde la respuesta del api
+
+en donde se requiere const token = localStorage.getItem('token');
+
+
+quitar token 
+logout(): void {
+  localStorage.removeItem('token');
+}
+
+servicio de manejo de token
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  private readonly TOKEN_KEY = 'token';
+
+  setToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  removeToken(): void {
+    localStorage.removeItem(this.TOKEN_KEY);
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
+}
+
+#########################################################################
+
+
+(solo para pruebas no produccion)
+solo en un servicio se agregan headers
+
+import { HttpHeaders } from '@angular/common/http';
+
+addCliente(cliente: ClienteBE): Observable<ClienteBE> {
+
+  const token = localStorage.getItem('token');
+
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+
+  return this.http.post<ClienteBE>(
+    `${this.baseUrl}/createcliente`,
+    cliente,
+    { headers }
+  );
+}
+
+#########################################################################
+ng generate interceptor auth
+
+construir un interceptor para token de acceso
+import { Injectable } from '@angular/core';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest
+} from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    const token = localStorage.getItem('token'); // o desde un AuthService
+
+    if (token) {
+      const authReq = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return next.handle(authReq);
+    }
+
+    return next.handle(req);
+  }
+}
 
 #########################################################################
