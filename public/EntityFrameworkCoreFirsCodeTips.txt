@@ -1,0 +1,76 @@
+#################################################################################################################
+Using Microsoft.EntityFrameworkCore;
+
+public class BarContext: DbContext
+{
+	public BarContext(DbContextOptions<BarContext> options)
+	{}
+
+	//Setea las tablas 
+	public DbSet<Beer> Beers {get;set;}
+	public DbSet<Brand> Brands {get;set;}
+
+	//Define el cambio de nombre  de la tabla (opcional)
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+	{
+		modelBuilder.Entity<Brand>().ToTable("Brand");
+		modelBuilder.Entity<Beer>().ToTable("Beer");
+	}
+}
+
+#################################################################################################################
+Definiendo los campos de tabla
+en un archivo de clase 
+
+Requiere
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Shema;
+
+public class Brand
+{
+	[Key]--> //Define el primary key de la tabla
+	[DatabaseGenerated(DatabaseGenerateOption.Identity)]-->Define el auto incremental
+	public int BrandId {get;set;}
+	public string Name {get;set;}
+
+	public virtual ICollection<Beer> {get;set;}--> permite navegar a otra tabla
+}
+
+public class Brand
+{
+	[Key]--> //Define el primary key de la tabla
+	[DatabaseGenerated(DatabaseGenerateOption.Identity)]-->Define el auto incremental
+	public int BeerId {get;set;}
+	public string Name {get;set;}
+	public int BrandId {get;set;}
+	[foreingKey("BrandId")]--> Define el campo por el cual se estable la ForeingKey
+	public virtual Brand Brand {get;set;}--> Define el nombre de la tabla para el ForeingKey	
+}
+
+#################################################################################################################
+Agregar en app.settings 
+"ConnectionStrings":{
+	"DefaultConnection":"Server=XXXXXXX\\YYYYYY;Database=ZZZZZZZz;Trusted_connection=True;MultipleActiveResultsSets=true"
+}
+
+Dentro del proyecto de api gargar entity tools
+Agregar en el program 
+Builder.Services.AddDbContext<Barcontext>(options =>{
+	options.UseSqlServer(Builder.configuration.getConnectionString("DefaultConnection"))
+});
+
+Para crear la base colocarlo despues de var app
+
+--> se debe comentar despues de creada la basepor que vuelve ha crear la base 
+using (var scope = app.Services.CreateScope())
+{
+	var barContext =  scope.ServiceProvider.GetRequiredServices<BarContext>();
+	barContext.Database.Migrate(); --> hace la migracion a base de datos la primeravez que se ejecuta
+}
+
+En la consola de BD
+Add-Migration InitDB --> Migración inicial version InitDB
+
+#################################################################################################################
+
+#################################################################################################################

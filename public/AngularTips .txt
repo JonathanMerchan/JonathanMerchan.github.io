@@ -1,4 +1,6 @@
-
+##################################################################################################################################################
+FUNDAMENTOS
+##################################################################################################################################################
 ng new XXXXX  --> crear proyecto
 ng g component componetns/XXXXX	--> crea un componente
 ng g service services/XXXX --> crea un servicio
@@ -82,6 +84,10 @@ export class ClienteBE
     ){}
 }
 #########################################################################
+
+##################################################################################################################################################
+HTML
+##################################################################################################################################################
 
 tabla datos boton
 <!-- <pre>{{ ClientesList | json }}</pre> -->
@@ -254,6 +260,10 @@ ngOnInit(){
 #########################################################################
 
 #########################################################################
+
+##################################################################################################################################################
+DIRECTIVAS
+##################################################################################################################################################
 Ejemplo directiva personlaizada () cambia el color del elemento con el mouse
 nombredirectiva =  appHighlight
 ts
@@ -302,7 +312,90 @@ ngOnInit(){
   }
 
 #########################################################################
-Exportar datos de una variable a excel
+##################################################################################################################################################
+SOLUCIONES UTILES
+##################################################################################################################################################
+SERVICIO DE EXPORTA  DATOS A EXCEL (LISTAS DE DATOS)
+
+EN EL SERVICIO
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import * as XLSX from 'xlsx'; //Instalar npm install xlsx file-saver --save
+import { saveAs } from 'file-saver';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ExportXlsxService {
+  // private dataList = new BehaviorSubject<any>(null);
+  private dataList: any[]=[];
+  private sheetName: string = "Hoja";
+  private fileName:string = "ExportData"
+
+  ListToExport(DataList: any[], SheetName: string, FileName:string) {
+    if (!DataList || DataList.length === 0) {
+      alert('No hay datos para exportar');
+      return;
+    }
+
+    if(!SheetName || !FileName){
+      alert('No se referencia nombre del archivo a crear');
+      return;
+    }
+
+    this.dataList = DataList;
+    this.sheetName = SheetName;
+    this.fileName = FileName;
+    this.ExportData();
+  }
+
+  ExportData(){
+
+    if(this.dataList.length === 0)      {
+      alert('No fue posible leer los datos del la lista');
+      return;
+    }
+
+    try {      
+      // Convertir los objetos a formato plano (opcional: filtrar columnas)
+      const exportData = this.dataList.map(obj => {
+        //Objeto con soporte para llaves dinámicas
+        const nuevoObjeto: Record<string, any> = {};
+        Object.entries(obj).forEach(([key, value]) => {
+          // Convierte 'nombreCliente' a 'NombreCliente'
+          const label = key.charAt(0).toUpperCase() + key.slice(1);
+          nuevoObjeto[label] = value;                    
+        });
+        return nuevoObjeto;
+      });
+    
+      // Crear hoja de Excel
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+      // Crear libro de Excel
+      const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, this.sheetName);
+
+      // Guardar archivo
+      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+      const time = new Date().getTime();
+      saveAs(data, `${this.fileName}${time}.xlsx`);
+
+    } catch (error) {
+      alert('Se presento un error al procesar los datos'+ error);
+      return;
+    }
+  }
+}
+
+EN EL COMPONENTE
+ exportarExcel2() {
+    this.exportXlsxService.ListToExport(this.ClientesList(), "Hoja Clientes", "ArchivoClientes")
+  }
+
+##################################################################################################################################################
+FUNCION EXPORTAR CON MAPERO DIRECTO DEL OBJETO EXCEL
 
 instalar 
 npm install xlsx file-saver --save
@@ -342,8 +435,120 @@ exportarExcel() {
     saveAs(data, `Clientes${time}.xlsx`);
   }
 
-#########################################################################
-Modelo de servicio de consulta de api sin autenticacion
+
+##################################################################################################################################################
+SERVICIO QUE ENVIA ADJUNTO AUN ENDPOINT
+
+TS
+// Se dispara cuando el usuario elige un archivo en la ventana emergente
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.archivoSeleccionado = file;
+      this.nombreArchivoVisual = file.name;
+    }
+  }
+
+  // Función principal
+  enviarAlServidor() {
+    if(!this.nombre){
+      alert("falta nombre");
+      return;
+    }
+    if (!this.descripcion){
+      alert("falta descripcion");
+      return;
+    }
+ 
+    if (!this.archivoSeleccionado) {
+      alert("Por favor selecciona un archivo primero");
+      return;
+    }
+
+    // Llamada al servicio pasando el archivo y el objeto de los inputs
+    this.AttachmentFileService.subirArchivo(this.archivoSeleccionado, this.nombreArchivoVisual).subscribe({
+      next: (res) => {
+        alert('¡Archivo y datos enviados con éxito!');
+        console.log(res);
+      },
+      error: (err) => {
+        alert('Error al subir: ' + err.message);
+      }
+    });
+  }
+}
+
+HTML
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-lg-8">
+        <h2 class="text-center mb-5">Subir Documentación</h2>
+       <form (ngSubmit)="enviarAlServidor()" #uploadForm="ngForm">
+          <div class="row g-3">
+
+            <div class="col-12 col-lg-6">
+              <a>Seleccione Tipo</a>
+              <select class="form-select" 
+                [(ngModel)]="tipo" 
+                name="tipo" 
+                required>
+                <option [ngValue]=0 disabled>Seleccione Tipo</option>
+                <option value=1>Tipo 1</option>
+                <option value=2>Tipo 2</option>
+                <option value=3>tipo 3</option>
+              </select>
+            </div>
+            
+
+            <div class="col-12 col-lg-6">
+              <label>Indique su nombre</label>
+                <input type="text" 
+                    class="form-control" 
+                    placeholder="Indique su nombre"
+                    name="nombre" 
+                    [(ngModel)]="nombre"  
+                    required>
+            </div>
+
+            <div class="col-12">
+              <label>Descripcion</label>
+                <textarea type="text" 
+                    class="form-control" 
+                    placeholder="Opcional (obligatorio)"
+                    name="descripcion" 
+                    [(ngModel)]="descripcion"  
+                    required></textarea>   
+            </div>
+                         
+
+            <div class="col-12">
+              <label>Archivo a enviar al Servidor</label>
+              <!-- Sección de Adjunto -->
+                <div class="file-upload-section">
+                    <input type="file" 
+                    class="hidden-input" 
+                    (change)="onFileSelected($event)" 
+                    #fileUpload>
+                </div>
+            </div>
+            
+            <div class="col-12 text-center">
+                <button type="submit" 
+                class="btn btn-primary btn-lg px-5" 
+                [disabled]="!uploadForm.form.valid || !archivoSeleccionado">
+                Enviar al Servidor
+                </button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+##################################################################################################################################################
+Modelo de servicio de consulta de api sin autenticacion, LOGIN ENDPOINT
 
 export class ClientService  {
   private baseUrl = 'https://localhost:7086';
